@@ -31,10 +31,15 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto flex items-stretch justify-between h-full gap-4">
           {/* Logo - Centered vertically manually */}
           <div className="flex items-center gap-2 py-4">
-            <Link href="/" className="flex items-center text-2xl font-bold tracking-tight group">
-              <span className="text-white group-hover:text-rose-500 transition-colors duration-500">Course</span>
-              <span className="text-rose-600 italic">Compare</span>
-              <div className="ml-2 w-3 h-3 bg-rose-600 rounded-full animate-pulse shadow-[0_0_10px_rgba(225,29,72,0.5)]"></div>
+            <Link href="/" className="flex items-center text-3xl font-extrabold tracking-tighter group">
+              <span className="text-white transition-colors duration-500">Course</span>
+              <span className="text-[#D90038]">finder</span>
+              <div className="ml-2 relative flex items-center justify-center">
+                <div className="w-5 h-5 bg-[#D90038] rounded-full"></div>
+                <svg className="absolute -bottom-2 -right-3 w-3 h-3 text-slate-300" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0l1.5 8 8 1.5-8 1.5-1.5 8-1.5-8-8-1.5 8-1.5z" />
+                </svg>
+              </div>
             </Link>
           </div>
 

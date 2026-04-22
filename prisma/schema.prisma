@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Course {
+  id                   String   @id @default(auto()) @map("_id") @db.ObjectId
+  title                String
+  school               String
+  location             String
+  delivery             String[]
+  load                 String[]
+  subject              String
+  credential           String
+  fee                  String
+  tuitionAmount        Float    @default(0.0)
+  imageUrl             String
+  link                 String
+  description          String   @default("")
+  timings              String   @default("")
+  startDate            String   @default("")
+  additionalStartDates Int      @default(0)
+  scholarshipAvailable Boolean  @default(false)
+  rating               Float    @default(0.0)
+  ieltsRequirement     String   @default("")
+  applicationDeadline  String   @default("")
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
