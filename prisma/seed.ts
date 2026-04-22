@@ -91,6 +91,33 @@ async function main() {
   }
   
   console.log(`Seeded ${count} courses from CSV!`);
+
+  // Seed Blogs
+  console.log('Seeding blogs...');
+  const { BLOGS } = require('../lib/blogs');
+  
+  await prisma.blog.deleteMany({});
+  
+  for (const blog of BLOGS) {
+    await prisma.blog.create({
+      data: {
+        slug: blog.slug,
+        title: blog.title,
+        excerpt: blog.excerpt,
+        category: blog.category,
+        author: blog.author,
+        authorRole: blog.authorRole,
+        date: blog.date,
+        readTime: blog.readTime,
+        coverImage: blog.coverImage,
+        tags: blog.tags,
+        relatedSubjects: blog.relatedSubjects,
+        content: blog.content,
+        published: true,
+      }
+    });
+  }
+  console.log(`Seeded ${BLOGS.length} blogs!`);
 }
 
 main()
