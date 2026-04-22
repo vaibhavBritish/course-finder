@@ -67,10 +67,10 @@ const PUBLICATIONS = [
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-white mt-20">
+    <main className="min-h-screen bg-white">
 
       {/* ── HERO ── */}
-      <section className="relative overflow-hidden bg-slate-900 text-white">
+      <section className="relative overflow-hidden bg-slate-100 text-slate-900">
         <div className="absolute inset-0">
           <Image
             src="/about-hero.png"
@@ -79,25 +79,25 @@ export default function AboutPage() {
             className="object-cover opacity-30"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-900/80 via-slate-900/60 to-[#ED2B3B]/40" />
+          <div className="absolute inset-0 bg-gradient-to-br from-white/85 via-slate-100/70 to-rose-100/70" />
         </div>
-        <div className="relative z-10 max-w-5xl mx-auto px-6 py-28 md:py-36">
-          <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-white/80 mb-8 backdrop-blur-sm">
+        <div className="relative z-10 max-w-5xl mx-auto px-6 pt-8 pb-28 md:pt-10 md:pb-36">
+          <div className="inline-flex items-center gap-2 bg-white/80 border border-slate-200 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-slate-700 mb-8 backdrop-blur-sm">
             <span className="w-1.5 h-1.5 rounded-full bg-[#ED2B3B] animate-pulse"></span>
             Canada's Education Marketplace
           </div>
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-bold leading-[1.05] mb-8 text-white">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-bold leading-[1.05] mb-8 text-slate-900">
             Education that works —<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-300 to-rose-400">wherever the future takes you</span>
           </h1>
-          <p className="text-xl text-white/70 max-w-3xl leading-relaxed">
+          <p className="text-xl text-slate-700 max-w-3xl leading-relaxed">
             Course Finder is Canada's marketplace for education, trusted by millions to find top-rated schools and in-demand programs backed by real employment data and verified student ratings and reviews.
           </p>
           <div className="flex flex-wrap gap-4 mt-10">
             <Link href="/courses" className="bg-[#ED2B3B] hover:bg-[#C4001B] text-white font-bold px-8 py-3.5 rounded-full transition-all shadow-lg shadow-red-900/30 text-sm">
               Explore Programs
             </Link>
-            <Link href="/schools" className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-8 py-3.5 rounded-full transition-all text-sm backdrop-blur-sm">
+            <Link href="/schools" className="bg-white hover:bg-slate-100 border border-slate-200 text-slate-900 font-bold px-8 py-3.5 rounded-full transition-all text-sm">
               Browse Schools
             </Link>
           </div>
@@ -153,25 +153,25 @@ export default function AboutPage() {
       </section>
 
       {/* ── EDITORIAL EXCELLENCE ── */}
-      <section className="bg-slate-900 text-white py-24 px-6">
+      <section className="bg-slate-100 text-slate-900 py-24 px-6">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
           <div>
             <p className="text-xs text-[#ED2B3B] font-bold uppercase tracking-widest mb-4">Editorial Excellence & Trusted Insights</p>
             <h2 className="text-4xl font-serif font-bold leading-snug mb-6">
               Data-driven rankings. <br />Independent reporting.
             </h2>
-            <p className="text-slate-400 leading-relaxed mb-6">
+            <p className="text-slate-600 leading-relaxed mb-6">
               Course Finder is committed to rigorous research, independent reporting, and data-driven rankings to help learners navigate a fast-changing education and job market with confidence. Our outcomes-based rankings—powered by proprietary learner data—set national benchmarks amid rising tuition, rapid technological change, and evolving workforce demands.
             </p>
-            <p className="text-slate-400 leading-relaxed">
-              Built on real employment data, labour market trends, and verified student outcomes, our editorial products surface what matters most: <span className="text-white font-medium">programs that deliver results</span>.
+            <p className="text-slate-600 leading-relaxed">
+              Built on real employment data, labour market trends, and verified student outcomes, our editorial products surface what matters most: <span className="text-slate-900 font-medium">programs that deliver results</span>.
             </p>
           </div>
           <div>
             <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-6">Featured in & cited by</p>
             <div className="grid grid-cols-2 gap-3">
               {PUBLICATIONS.map((pub) => (
-                <div key={pub} className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-300 font-medium hover:bg-white/10 transition-colors">
+                <div key={pub} className="bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-600 font-medium hover:bg-slate-50 transition-colors">
                   {pub}
                 </div>
               ))}
@@ -199,12 +199,12 @@ export default function AboutPage() {
               Find Programs
             </Link>
           </div>
-          <div className="bg-slate-900 rounded-2xl p-10 flex flex-col items-start">
+          <div className="bg-slate-100 rounded-2xl p-10 flex flex-col items-start border border-slate-200">
             <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mb-6">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+              <svg className="w-6 h-6 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
             </div>
-            <p className="text-xs font-bold text-white/40 uppercase tracking-widest mb-2">For Education Partners</p>
-            <h3 className="text-xl font-bold text-white mb-3">Join Canada's marketplace for education and connect with motivated learners.</h3>
+            <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">For Education Partners</p>
+            <h3 className="text-xl font-bold text-slate-900 mb-3">Join Canada's marketplace for education and connect with motivated learners.</h3>
             <Link href="/contact" className="mt-auto inline-block bg-white hover:bg-slate-100 text-slate-900 font-bold px-6 py-3 rounded-full text-sm transition-all">
               Partner With Us
             </Link>
@@ -257,7 +257,7 @@ export default function AboutPage() {
 
       {/* ── FOOTER CTA ── */}
       <section className="bg-[#ED2B3B] py-20 px-6 text-center">
-        <h2 className="text-4xl md:text-5xl font-serif font-bold text-white mb-6">
+        <h2 className="text-4xl md:text-5xl font-serif font-bold text-slate-900 mb-6">
           Career moves start here
         </h2>
         <p className="text-rose-100 text-lg mb-10 max-w-xl mx-auto">

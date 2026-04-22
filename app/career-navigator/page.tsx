@@ -55,7 +55,7 @@ export default function CareerNavigatorPage() {
   const rest = blogs.slice(1);
 
   return (
-    <main className="min-h-screen bg-slate-50 mt-20">
+    <main className="min-h-screen bg-slate-50">
       {/* ── PAGE HEADER ── */}
       <section className="bg-white border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-6 py-12">
@@ -211,20 +211,20 @@ export default function CareerNavigatorPage() {
       </div>
 
       {/* ── NEWSLETTER CTA ── */}
-      <section className="bg-slate-900 py-16 px-6 mt-8">
+      <section className="bg-slate-100 py-16 px-6 mt-8 border-t border-slate-200">
         <div className="max-w-2xl mx-auto text-center">
           <p className="text-xs font-bold text-[#ED2B3B] uppercase tracking-widest mb-3">Stay Informed</p>
-          <h2 className="text-3xl font-serif font-bold text-white mb-4">
+          <h2 className="text-3xl font-serif font-bold text-slate-900 mb-4">
             Get career insights delivered to your inbox
           </h2>
-          <p className="text-slate-400 mb-8 text-sm">
+          <p className="text-slate-600 mb-8 text-sm">
             Join 50,000+ learners who read our weekly career and education newsletter.
           </p>
           <div className="flex gap-3 max-w-md mx-auto">
             <input
               type="email"
               placeholder="Your email address"
-              className="flex-1 bg-white/10 border border-white/20 text-white placeholder:text-white/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#ED2B3B] backdrop-blur-sm"
+              className="flex-1 bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#ED2B3B]"
             />
             <button className="bg-[#ED2B3B] hover:bg-[#C4001B] text-white font-bold px-5 py-3 rounded-xl text-sm transition-all whitespace-nowrap">
               Subscribe

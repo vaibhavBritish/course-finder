@@ -1,8 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { BlogCategory } from "@/lib/blogs";
+import dynamic from "next/dynamic";
+import "react-quill-new/dist/quill.snow.css";
+
+const QuillEditor = dynamic(() => import("react-quill-new"), {
+  ssr: false,
+  loading: () => <div className="h-[400px] bg-slate-50 animate-pulse rounded-xl" />,
+});
 
 const CATEGORIES: BlogCategory[] = [
   "Business",
@@ -108,7 +115,7 @@ export default function BlogForm({ initialData, isEditing = false }: BlogFormPro
             value={formData.title}
             onChange={handleChange}
             placeholder="Article Title"
-            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#ED2B3B] outline-none"
+            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#ED2B3B] outline-none placeholder:text-slate-500 text-slate-900"
           />
         </div>
         <div className="space-y-2">
@@ -119,7 +126,7 @@ export default function BlogForm({ initialData, isEditing = false }: BlogFormPro
             value={formData.slug}
             onChange={handleChange}
             placeholder="article-slug-url"
-            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#ED2B3B] outline-none"
+            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#ED2B3B] outline-none placeholder:text-slate-500 text-slate-900"
           />
         </div>
       </div>
@@ -132,7 +139,7 @@ export default function BlogForm({ initialData, isEditing = false }: BlogFormPro
           onChange={handleChange}
           rows={3}
           placeholder="Short summary for the listing page..."
-          className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#ED2B3B] outline-none"
+          className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#ED2B3B] outline-none placeholder:text-slate-500 text-slate-900"
         />
       </div>
 
@@ -143,7 +150,7 @@ export default function BlogForm({ initialData, isEditing = false }: BlogFormPro
             name="category"
             value={formData.category}
             onChange={handleChange}
-            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#ED2B3B] outline-none"
+            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#ED2B3B] outline-none text-slate-900"
           >
             {CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
           </select>
@@ -154,7 +161,7 @@ export default function BlogForm({ initialData, isEditing = false }: BlogFormPro
             name="author"
             value={formData.author}
             onChange={handleChange}
-            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#ED2B3B] outline-none"
+            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#ED2B3B] outline-none placeholder:text-slate-500 text-slate-900"
           />
         </div>
         <div className="space-y-2">
@@ -163,7 +170,7 @@ export default function BlogForm({ initialData, isEditing = false }: BlogFormPro
             name="authorRole"
             value={formData.authorRole}
             onChange={handleChange}
-            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#ED2B3B] outline-none"
+            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#ED2B3B] outline-none placeholder:text-slate-500 text-slate-900"
           />
         </div>
       </div>
@@ -176,7 +183,7 @@ export default function BlogForm({ initialData, isEditing = false }: BlogFormPro
           value={formData.coverImage}
           onChange={handleChange}
           placeholder="https://images.unsplash.com/..."
-          className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#ED2B3B] outline-none"
+          className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#ED2B3B] outline-none placeholder:text-slate-500 text-slate-900"
         />
       </div>
 
@@ -188,7 +195,7 @@ export default function BlogForm({ initialData, isEditing = false }: BlogFormPro
             value={formData.tags}
             onChange={handleChange}
             placeholder="AI, Career, Canada"
-            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#ED2B3B] outline-none"
+            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#ED2B3B] outline-none placeholder:text-slate-500 text-slate-900"
           />
         </div>
         <div className="space-y-2">
@@ -198,22 +205,31 @@ export default function BlogForm({ initialData, isEditing = false }: BlogFormPro
             value={formData.relatedSubjects}
             onChange={handleChange}
             placeholder="Computer Science, Data Science"
-            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#ED2B3B] outline-none"
+            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#ED2B3B] outline-none placeholder:text-slate-500 text-slate-900"
           />
         </div>
       </div>
 
       <div className="space-y-2">
-        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Content (HTML)</label>
-        <textarea
-          required
-          name="content"
-          value={formData.content}
-          onChange={handleChange}
-          rows={15}
-          placeholder="<p>Article content here...</p>"
-          className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#ED2B3B] outline-none font-mono text-sm"
-        />
+        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Content</label>
+        <div className="bg-white border border-slate-200 rounded-xl overflow-hidden min-h-[400px]">
+          <QuillEditor
+            theme="snow"
+            value={formData.content}
+            onChange={(content) => setFormData(prev => ({ ...prev, content }))}
+            modules={{
+              toolbar: [
+                [{ 'header': [1, 2, 3, false] }],
+                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+                ['link', 'image'],
+                ['clean']
+              ],
+            }}
+            placeholder="Write your article here..."
+            className="h-[350px] text-slate-900"
+          />
+        </div>
       </div>
 
       <div className="flex items-center gap-2">

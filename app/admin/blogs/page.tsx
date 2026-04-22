@@ -3,12 +3,16 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useAuth } from "@/context/AuthContext";
 
 export default function AdminBlogsPage() {
+  const { user, loading: authLoading, logout } = useAuth();
   const [blogs, setBlogs] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchBlogs = async () => {
+    // Only fetch if authenticated
+    if (!user) return;
     setIsLoading(true);
     try {
       const res = await fetch("/api/blogs");
@@ -24,8 +28,20 @@ export default function AdminBlogsPage() {
   };
 
   useEffect(() => {
-    fetchBlogs();
-  }, []);
+    if (!authLoading && user) {
+      fetchBlogs();
+    }
+  }, [user, authLoading]);
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <div className="w-10 h-10 border-4 border-[#ED2B3B] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!user) return null; // Redirect handled by AuthContext
 
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this article?")) return;
@@ -48,13 +64,21 @@ export default function AdminBlogsPage() {
             <h1 className="text-3xl font-serif font-bold text-slate-900">Manage Articles</h1>
             <p className="text-slate-500 mt-1">Add, edit or delete Career Navigator content.</p>
           </div>
-          <Link
-            href="/admin/blogs/new"
-            className="bg-[#ED2B3B] hover:bg-[#C4001B] text-white font-bold px-6 py-3 rounded-full transition-all shadow-md shadow-red-100 flex items-center gap-2"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
-            Create New Article
-          </Link>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={logout}
+              className="px-6 py-3 border border-slate-200 text-slate-600 font-bold rounded-full hover:bg-slate-50 transition-all text-sm"
+            >
+              Sign Out
+            </button>
+            <Link
+              href="/admin/blogs/new"
+              className="bg-[#ED2B3B] hover:bg-[#C4001B] text-white font-bold px-6 py-3 rounded-full transition-all shadow-md shadow-red-100 flex items-center gap-2 text-sm"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+              Create New Article
+            </Link>
+          </div>
         </div>
 
         {isLoading ? (

@@ -1,38 +1,192 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
-const categories = [
-  "BUSINESS",
-  "BEAUTY",
-  "CREATIVE ARTS & MEDIA",
-  "CULINARY ARTS",
-  "DATA SCIENCE",
-  "DESIGN",
-  "DEVELOPMENT",
-  "DIGITAL MARKETING",
-  "FINANCE",
-  "HEALTH CARE",
-  "INFORMATION TECHNOLOGY",
-  "PROJECT MANAGEMENT",
-  "SKILLED TRADES",
-  "LANGUAGE LEARNING",
-];
+const categoryMenu: Record<string, string[]> = {
+  "Business": [
+    "Online MBA Programs",
+    "MBA",
+    "Business",
+    "Accounting",
+    "Bookkeeping",
+    "Business Analysis",
+    "Change Management",
+    "Entrepreneurship",
+    "Human Resources",
+    "Hospitality and Tourism",
+    "Leadership & Management",
+    "Payroll",
+    "Sales Training",
+    "Supply Chain Management",
+  ],
+  "Beauty": [
+    "Makeup Artistry",
+    "Esthetics",
+    "Hair Styling",
+    "Nail Technician",
+    "Barbering",
+    "Cosmetology",
+    "Medical Aesthetics",
+    "Beauty Business",
+  ],
+  "Creative Arts & Media": [
+    "Graphic Design",
+    "Interior Design",
+    "Photography",
+    "Film & Video",
+    "Animation",
+    "Music Production",
+    "Journalism",
+    "Content Creation",
+  ],
+  "Culinary Arts": [
+    "Culinary Arts",
+    "Baking & Pastry",
+    "Restaurant Management",
+    "Food Safety",
+    "Catering",
+    "Hospitality Culinary",
+  ],
+  "Data Science": [
+    "Data Science",
+    "Data Analytics",
+    "Business Intelligence",
+    "Machine Learning",
+    "Artificial Intelligence",
+    "Statistics",
+    "Data Engineering",
+  ],
+  "Design": [
+    "UX/UI Design",
+    "Product Design",
+    "Graphic Design",
+    "Web Design",
+    "Interior Design",
+    "Fashion Design",
+    "Design Thinking",
+  ],
+  "Development": [
+    "Web Development",
+    "Frontend Development",
+    "Backend Development",
+    "Full-Stack Development",
+    "Mobile App Development",
+    "Software Engineering",
+    "QA Testing",
+    "DevOps",
+  ],
+  "Digital Marketing": [
+    "Digital Marketing",
+    "SEO",
+    "Social Media Marketing",
+    "Content Marketing",
+    "Email Marketing",
+    "PPC Advertising",
+    "Marketing Analytics",
+    "Brand Strategy",
+  ],
+  "Finance": [
+    "Finance",
+    "Financial Planning",
+    "Investment Management",
+    "FinTech",
+    "Banking",
+    "Risk Management",
+    "Taxation",
+  ],
+  "Health Care": [
+    "Healthcare Administration",
+    "Nursing",
+    "Medical Office Assistant",
+    "Pharmacy Assistant",
+    "Personal Support Worker",
+    "Health Informatics",
+    "Public Health",
+  ],
+  "Information Technology": [
+    "Cybersecurity",
+    "Cloud Computing",
+    "Network Administration",
+    "IT Support",
+    "Systems Administration",
+    "Database Administration",
+    "IT Project Management",
+  ],
+  "Project Management": [
+    "Project Management",
+    "PMP Preparation",
+    "Agile & Scrum",
+    "Construction Project Management",
+    "IT Project Management",
+    "Program Management",
+  ],
+  "Skilled Trades": [
+    "Electrician",
+    "Plumbing",
+    "HVAC",
+    "Welding",
+    "Automotive Service",
+    "Carpentry",
+    "Heavy Equipment",
+  ],
+  "Language Learning": [
+    "English Language",
+    "IELTS Preparation",
+    "French Language",
+    "Business English",
+    "Academic Writing",
+    "Communication Skills",
+  ],
+};
+
+const categories = Object.keys(categoryMenu);
+
+type SchoolEntry = {
+  name: string;
+  slug: string;
+  location: string;
+  courseCount: number;
+  averageRating: number;
+  logoUrl?: string;
+};
 
 const Navbar = () => {
   const [isCoursesOpen, setIsCoursesOpen] = useState(false);
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [isSchoolsOpen, setIsSchoolsOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [schools, setSchools] = useState<SchoolEntry[]>([]);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchSchools = async () => {
+      try {
+        const res = await fetch("/api/schools?limit=18");
+        if (!res.ok) return;
+        const data = await res.json();
+        if (isMounted && Array.isArray(data.schools)) {
+          setSchools(data.schools);
+        }
+      } catch {
+        // Keep nav usable even if schools API fails.
+      }
+    };
+    fetchSchools();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
       {/* Top Main Navbar - Increased height and removed py-4 from nav to use flex-stretch */}
-      <nav className="bg-slate-950/90 backdrop-blur-md border-b border-white/5 px-4 md:px-8 h-20">
+      <nav className="bg-slate-50/95 backdrop-blur-md px-4 md:px-8 h-20">
         <div className="max-w-7xl mx-auto flex items-stretch justify-between h-full gap-4">
           {/* Logo - Centered vertically manually */}
           <div className="flex items-center gap-2 py-4">
             <Link href="/" className="flex items-center text-3xl font-extrabold tracking-tighter group">
-              <span className="text-white transition-colors duration-500">Course</span>
+              <span className="text-slate-900 transition-colors duration-500">Course</span>
               <span className="text-[#D90038]">finder</span>
               <div className="ml-2 relative flex items-center justify-center">
                 <div className="w-5 h-5 bg-[#D90038] rounded-full"></div>
@@ -56,17 +210,23 @@ const Navbar = () => {
               <div
                 key={link}
                 className="relative group h-full flex items-center"
-                onMouseEnter={() => link === "COURSES" && setIsCoursesOpen(true)}
+                onMouseEnter={() => {
+                  if (link === "COURSES") setIsCoursesOpen(true);
+                  if (link === "SCHOOLS") setIsSchoolsOpen(true);
+                }}
                 onMouseLeave={() => {
                    if (link === "COURSES") {
                      setIsCoursesOpen(false);
-                     setHoveredIndex(null);
+                     setActiveCategory(null);
+                   }
+                   if (link === "SCHOOLS") {
+                     setIsSchoolsOpen(false);
                    }
                 }}
               >
                 <Link
-                  href={link === "COURSES" ? "#" : `/${link.toLowerCase().replace(/ /g, "-")}`}
-                  className="text-[11px] font-black text-slate-400 group-hover:text-white transition-all duration-300 tracking-[0.2em] relative h-full flex items-center px-1"
+                  href={link === "COURSES" ? "#" : link === "SCHOOLS" ? "/schools" : `/${link.toLowerCase().replace(/ /g, "-")}`}
+                  className="text-[11px] font-black text-slate-500 group-hover:text-slate-900 transition-all duration-300 tracking-[0.2em] relative h-full flex items-center px-1"
                 >
                   {link}
                   {/* Underline helper */}
@@ -75,56 +235,120 @@ const Navbar = () => {
 
                 {/* Courses Dropdown */}
                 {link === "COURSES" && isCoursesOpen && (
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 z-50 w-72 pt-1">
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 z-50 w-64 pt-1">
                     {/* Invisible Bridge to catch mouse movement and prevent dismissal */}
                     <div className="absolute -top-10 left-0 w-full h-10 bg-transparent pointer-events-auto" />
                     
                     {/* Caret with Drop Animation */}
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 animate-in zoom-in-50 slide-in-from-top-4 duration-300">
-                      <div className="w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-b-[10px] border-b-rose-600"></div>
+                      <div className="w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-b-8 border-b-rose-600"></div>
                     </div>
                     
                     {/* Dropdown Menu */}
-                    <div className="bg-white rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.3)] border-t-4 border-rose-600 overflow-hidden animate-in fade-in zoom-in-95 slide-in-from-top-2 duration-300 origin-top mt-2">
-                      <div className="flex flex-col py-1 relative">
-                        {/* Magnetic Hover Background */}
-                        {hoveredIndex !== null && (
-                          <div 
-                            className="absolute left-0 w-full bg-zinc-50 border-y border-zinc-100 transition-all duration-300 ease-out z-0"
-                            style={{ 
-                              top: `${hoveredIndex * 52 + 4}px`, 
-                              height: '52px' 
-                            }}
-                          />
-                        )}
-
+                    <div className="bg-white rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.18)] border border-slate-200 border-t-4 border-t-rose-600 overflow-visible animate-in fade-in zoom-in-95 slide-in-from-top-2 duration-300 origin-top mt-2">
+                      <div className="relative flex flex-col py-1">
                         {categories.map((category, idx) => (
-                          <Link
+                          <div
                             key={category}
-                            href={`/courses/${category.toLowerCase().replace(/ /g, "-")}`}
-                            onMouseEnter={() => setHoveredIndex(idx)}
-                            onClick={() => setIsCoursesOpen(false)}
-                            className="relative z-10 flex items-center justify-between px-8 py-4 group/item transition-all duration-200"
-                            style={{ 
-                              animationDelay: `${idx * 40}ms`,
-                              animation: 'fadeInAndSlideIn 0.5s ease-out forwards'
-                            }}
+                            className="relative"
+                            onMouseEnter={() => setActiveCategory(category)}
                           >
-                            <span className={`text-[11px] font-black tracking-widest transition-colors duration-300 ${hoveredIndex === idx ? 'text-rose-600' : 'text-slate-900'}`}>
-                              {category}
-                            </span>
-                            <div className="flex items-center gap-2 overflow-hidden">
-                               <svg 
-                                className={`w-3 h-3 transition-all duration-300 transform ${hoveredIndex === idx ? 'translate-x-0 opacity-100 text-rose-600' : '-translate-x-4 opacity-0 text-slate-400'}`} 
-                                fill="none" 
-                                stroke="currentColor" 
-                                viewBox="0 0 24 24"
-                              >
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M9 5l7 7-7 7" />
+                            <Link
+                              href={`/courses/${category.toLowerCase().replace(/ /g, "-")}`}
+                              onClick={() => {
+                                setIsCoursesOpen(false);
+                                setActiveCategory(null);
+                              }}
+                              className={`flex items-center justify-between px-5 py-2.5 transition-colors duration-150 ${
+                                activeCategory === category
+                                  ? "bg-rose-50 text-rose-700"
+                                  : "text-slate-700 hover:bg-slate-50"
+                              }`}
+                            >
+                              <span className="text-[11px] font-bold tracking-[0.12em] uppercase">
+                                {category}
+                              </span>
+                              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" />
                               </svg>
-                            </div>
-                          </Link>
+                            </Link>
+
+                            {activeCategory === category && (
+                              <div
+                                className={`absolute left-full ml-0 w-72 bg-white rounded-lg border border-slate-200 shadow-xl py-2 max-h-[calc(100vh-120px)] overflow-y-auto ${
+                                  idx >= categories.length - 4 ? "bottom-0" : "top-0"
+                                }`}
+                              >
+                                {categoryMenu[category].map((item) => (
+                                  <Link
+                                    key={item}
+                                    href={`/courses?subject=${encodeURIComponent(item)}`}
+                                    onClick={() => {
+                                      setIsCoursesOpen(false);
+                                      setActiveCategory(null);
+                                    }}
+                                    className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-rose-700 transition-colors"
+                                  >
+                                    {item}
+                                  </Link>
+                                ))}
+                              </div>
+                            )}
+                          </div>
                         ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Schools Dropdown */}
+                {link === "SCHOOLS" && isSchoolsOpen && (
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 z-50 w-80 pt-1">
+                    <div className="absolute -top-8 left-0 w-full h-8 bg-transparent pointer-events-auto" />
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2">
+                      <div className="w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-b-8 border-b-rose-600"></div>
+                    </div>
+                    <div className="bg-white rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.18)] border border-slate-200 border-t-4 border-t-rose-600 mt-2 overflow-hidden">
+                      <div className="max-h-[420px] overflow-y-auto py-1">
+                        {schools.length === 0 ? (
+                          <div className="px-4 py-3 text-sm text-slate-500">No schools available</div>
+                        ) : (
+                          schools.map((school) => (
+                            <Link
+                              key={school.slug}
+                              href={`/schools/${school.slug}`}
+                              onClick={() => setIsSchoolsOpen(false)}
+                              className="block px-4 py-2.5 hover:bg-slate-50 transition-colors"
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className="w-9 h-9 rounded-md border border-slate-200 bg-white relative overflow-hidden p-1 shrink-0">
+                                  {school.logoUrl ? (
+                                    <Image src={school.logoUrl} alt={`${school.name} logo`} fill className="object-contain p-1" />
+                                  ) : (
+                                    <div className="w-full h-full flex items-center justify-center text-[9px] text-slate-400 font-semibold">
+                                      LOGO
+                                    </div>
+                                  )}
+                                </div>
+                                <div className="min-w-0">
+                                  <p className="text-sm font-semibold text-slate-800 line-clamp-1">{school.name}</p>
+                                  <p className="text-xs text-slate-500 mt-0.5 line-clamp-1">
+                                    {school.courseCount} courses • {school.location}
+                                  </p>
+                                </div>
+                              </div>
+                            </Link>
+                          ))
+                        )}
+                      </div>
+                      <div className="border-t border-slate-100 p-3">
+                        <Link
+                          href="/schools"
+                          onClick={() => setIsSchoolsOpen(false)}
+                          className="text-xs font-bold text-rose-600 hover:text-rose-700 tracking-wider uppercase"
+                        >
+                          View all schools
+                        </Link>
                       </div>
                     </div>
                   </div>
@@ -154,7 +378,7 @@ const Navbar = () => {
               <input
                 type="text"
                 placeholder="Search resources..."
-                className="w-full bg-slate-900 text-white text-xs rounded-full py-3.5 pl-12 pr-28 border border-white/5 focus:outline-none focus:border-rose-600/50 focus:ring-4 focus:ring-rose-600/10 transition-all placeholder:text-slate-500 font-medium"
+                className="w-full bg-slate-100 text-slate-900 text-xs rounded-full py-3.5 pl-12 pr-28 border border-slate-200 focus:outline-none focus:border-rose-600/50 focus:ring-4 focus:ring-rose-600/10 transition-all placeholder:text-slate-500 font-medium"
               />
               <button className="absolute right-1 top-1 bottom-1 bg-rose-600 hover:bg-rose-500 text-white text-[10px] font-black uppercase tracking-widest px-6 rounded-full transition-all shadow-lg shadow-rose-600/20 active:scale-95 z-20">
                 Search
@@ -164,42 +388,7 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Stats Bar with subtle glow */}
-      <div className="bg-slate-900/80 backdrop-blur-md border-b border-white/5 py-2 px-4 md:px-8 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-rose-500/20 to-transparent"></div>
-        <div className="max-w-7xl mx-auto flex items-center gap-8 text-[10px] md:text-xs">
-          <div className="flex items-center gap-3 group cursor-pointer">
-             <span className="text-lg grayscale group-hover:grayscale-0 transition-all duration-500">🇨🇦</span>
-             <span className="text-slate-300 font-bold border-b border-rose-600 pb-0.5 leading-none group-hover:text-white transition-colors">
-               Canadian unemployment
-             </span>
-          </div>
-
-          <div className="flex items-center gap-6 text-slate-500 font-medium">
-            <div className="flex items-center gap-2">
-              <span className="font-black text-white">6.7%</span>
-              <span className="text-[9px] uppercase tracking-tighter opacity-60">March 2026</span>
-            </div>
-
-            <div className="w-px h-3 bg-white/10"></div>
-
-            <div className="flex items-center gap-2 group/stat">
-              <div className="bg-emerald-500/10 p-1 rounded-full group-hover/stat:bg-emerald-500/20 transition-colors">
-                <svg 
-                  className="w-2.5 h-2.5 text-emerald-400 group-hover/stat:scale-125 transition-transform" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M5 10l7-7m0 0l7 7m-7-7v18" />
-                </svg>
-              </div>
-              <span className="font-black text-white">0.2</span>
-              <span className="text-[9px] uppercase tracking-tighter opacity-60">Monthly Change</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Navbar ends here */}
 
       <style jsx global>{`
         @keyframes fadeInAndSlideIn {

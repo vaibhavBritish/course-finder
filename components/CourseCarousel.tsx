@@ -25,10 +25,10 @@ export default function CourseCarousel({ title, category, courses, onOpenLeadMod
   if (!courses || courses.length === 0) return null;
 
   return (
-    <section className="py-12 bg-white dark:bg-slate-950 border-b border-slate-100 dark:border-white/5">
+    <section className="py-12 bg-white border-b border-slate-100">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
-          <h2 className="text-2xl md:text-3xl font-light text-slate-800 dark:text-white">
+          <h2 className="text-2xl md:text-3xl font-light text-slate-800">
              {title}
           </h2>
           <div className="flex items-center gap-6">
@@ -39,10 +39,10 @@ export default function CourseCarousel({ title, category, courses, onOpenLeadMod
               View All Courses
             </Link>
             <div className="hidden md:flex items-center gap-2">
-              <button onClick={scrollLeft} className="w-10 h-10 rounded-full border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-400 hover:text-rose-600 hover:border-rose-600 transition-all z-10 bg-white dark:bg-slate-950 hover:shadow-lg active:-translate-y-0.5">
+              <button onClick={scrollLeft} className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:text-rose-600 hover:border-rose-600 transition-all z-10 bg-white hover:shadow-lg active:-translate-y-0.5">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg>
               </button>
-              <button onClick={scrollRight} className="w-10 h-10 rounded-full border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-400 hover:text-rose-600 hover:border-rose-600 transition-all z-10 bg-white dark:bg-slate-950 hover:shadow-lg active:-translate-y-0.5">
+              <button onClick={scrollRight} className="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:text-rose-600 hover:border-rose-600 transition-all z-10 bg-white hover:shadow-lg active:-translate-y-0.5">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
               </button>
             </div>

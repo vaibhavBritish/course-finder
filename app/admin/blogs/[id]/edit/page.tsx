@@ -2,13 +2,16 @@
 
 import { useState, useEffect, use } from "react";
 import BlogForm from "@/components/BlogForm";
+import { useAuth } from "@/context/AuthContext";
 
 export default function EditBlogPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
+  const { user, loading: authLoading } = useAuth();
   const [blog, setBlog] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (authLoading || !user) return;
     const fetchBlog = async () => {
       try {
         const res = await fetch(`/api/blogs/${id}`);
