@@ -1,12 +1,16 @@
 import React from "react";
+import { notFound } from "next/navigation";
 
 export default async function CourseCategoryPage({
   params,
 }: {
-  params: Promise<{ category: string }>;
+  params: Promise<{ category?: string }>;
 }) {
   const { category } = await params;
-  const formattedCategory = category
+  const rawCategory = (category || "").trim();
+  if (!rawCategory) notFound();
+
+  const formattedCategory = rawCategory
     .split("-")
     .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");

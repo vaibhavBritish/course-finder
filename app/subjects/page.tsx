@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 const SUBJECTS = [
-  { slug: "data-science", name: "Data Science" },
+  { slug: "data-science-courses", name: "Data Science" },
   { slug: "digital-marketing", name: "Digital Marketing" },
   { slug: "product-management", name: "Product Management" },
   { slug: "social-media-marketing", name: "Social Media Marketing" },

@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
 
 export default function AdminBlogsPage() {
@@ -109,7 +108,18 @@ export default function AdminBlogsPage() {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-4">
                         <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 relative bg-slate-100 border border-slate-100">
-                          <Image src={blog.coverImage} alt={blog.title} fill className="object-cover" />
+                          <img
+                            src={blog.coverImage || "/favicon.ico"}
+                            alt={blog.title}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                            referrerPolicy="no-referrer"
+                            onError={(e) => {
+                              const target = e.currentTarget;
+                              if (target.src.endsWith("/favicon.ico")) return;
+                              target.src = "/favicon.ico";
+                            }}
+                          />
                         </div>
                         <div className="min-w-0">
                           <p className="text-sm font-bold text-slate-900 truncate">{blog.title}</p>

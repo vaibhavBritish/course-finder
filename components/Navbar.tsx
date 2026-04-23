@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 
 const categoryMenu: Record<string, string[]> = {
   "Business": [
@@ -373,7 +372,18 @@ const Navbar = () => {
                               <div className="flex items-center gap-3">
                                 <div className="w-9 h-9 rounded-md border border-slate-200 bg-white relative overflow-hidden p-1 shrink-0">
                                   {school.logoUrl ? (
-                                    <Image src={school.logoUrl} alt={`${school.name} logo`} fill className="object-contain p-1" />
+                                    <img
+                                      src={school.logoUrl}
+                                      alt={`${school.name} logo`}
+                                      className="w-full h-full object-contain"
+                                      loading="lazy"
+                                      referrerPolicy="no-referrer"
+                                      onError={(e) => {
+                                        const target = e.currentTarget;
+                                        if (target.src.endsWith("/favicon.ico")) return;
+                                        target.src = "/favicon.ico";
+                                      }}
+                                    />
                                   ) : (
                                     <div className="w-full h-full flex items-center justify-center text-[9px] text-slate-400 font-semibold">
                                       LOGO

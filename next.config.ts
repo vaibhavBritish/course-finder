@@ -27,6 +27,14 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'cdn.freebiesupply.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'www.timeshighereducation.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'media.deloitte.com',
+      },
     ],
   },
 };

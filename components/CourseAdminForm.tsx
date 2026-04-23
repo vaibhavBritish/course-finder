@@ -21,6 +21,12 @@ const CREDENTIAL_OPTIONS = [
 
 const SUBJECT_OPTIONS = [
   "Business",
+  "Accounting",
+  "Bookkeeping",
+  "Economics",
+  "Law",
+  "Life Sciences",
+  "Biochemistry, Microbiology and Immunology",
   "Data Science",
   "Information Technology",
   "Healthcare",
@@ -107,8 +113,8 @@ export default function CourseAdminForm({ initialData, isEditing = false }: Prop
             ? `Domestic: $${domesticTuition.toLocaleString()} per year | International: $${internationalTuition.toLocaleString()} per year`
             : "$0 per year",
         tuitionAmount: domesticTuition,
-        delivery: formData.delivery.split(",").map((v) => v.trim()).filter(Boolean),
-        load: formData.load.split(",").map((v) => v.trim()).filter(Boolean),
+        delivery: formData.delivery.split(",").map((v: string) => v.trim()).filter(Boolean),
+        load: formData.load.split(",").map((v: string) => v.trim()).filter(Boolean),
       };
 
       const url = isEditing ? `/api/admin/courses/${initialData.id}` : "/api/admin/courses";

@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 
 interface Props {
@@ -32,6 +31,7 @@ export default async function ArticlePage({ params }: Props) {
   });
   
   if (!blog) notFound();
+  const fallbackImage = "/favicon.ico";
 
   // Fetch related courses based on blog's relatedSubjects
   let relatedCourses: { id: string; title: string; school: string; fee: string; credential: string; imageUrl: string }[] = [];
@@ -91,7 +91,7 @@ export default async function ArticlePage({ params }: Props) {
           <div className="flex flex-wrap items-center gap-5 pb-6 border-b border-slate-100">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-[#ED2B3B] flex items-center justify-center text-white text-sm font-bold shrink-0">
-                {blog.author.split(" ").map(n => n[0]).join("").slice(0, 2)}
+                {blog.author.split(" ").map((n: string) => n[0]).join("").slice(0, 2)}
               </div>
               <div>
                 <p className="text-sm font-bold text-slate-900">{blog.author}</p>
@@ -121,12 +121,12 @@ export default async function ArticlePage({ params }: Props) {
 
       {/* ── COVER IMAGE ── */}
       <div className="relative h-64 md:h-[420px] w-full">
-        <Image
-          src={blog.coverImage}
+        <img
+          src={blog.coverImage || fallbackImage}
           alt={blog.title}
-          fill
-          className="object-cover"
-          priority
+          className="w-full h-full object-cover"
+          loading="eager"
+          referrerPolicy="no-referrer"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 to-transparent" />
       </div>
@@ -147,6 +147,12 @@ export default async function ArticlePage({ params }: Props) {
                 prose-blockquote:border-l-4 prose-blockquote:border-[#ED2B3B] prose-blockquote:bg-red-50 prose-blockquote:py-1 prose-blockquote:px-6 prose-blockquote:rounded-r-xl prose-blockquote:not-italic
                 prose-strong:text-slate-800
                 prose-li:text-slate-600
+                prose-p:break-normal prose-li:break-normal
+                prose-a:break-all
+                prose-img:max-w-full prose-img:h-auto
+                prose-table:block prose-table:max-w-full prose-table:overflow-x-auto
+                prose-pre:max-w-full prose-pre:overflow-x-auto
+                wrap-break-word
                 [&_.lead]:text-xl [&_.lead]:text-slate-700 [&_.lead]:font-light [&_.lead]:leading-relaxed [&_.lead]:mb-8"
               dangerouslySetInnerHTML={{ __html: blog.content }}
             />
@@ -154,7 +160,7 @@ export default async function ArticlePage({ params }: Props) {
             {/* Author bio card */}
             <div className="mt-12 p-6 bg-white rounded-2xl border border-slate-100 shadow-sm flex gap-5 items-start">
               <div className="w-14 h-14 rounded-2xl bg-[#ED2B3B] flex items-center justify-center text-white text-lg font-bold shrink-0">
-                {blog.author.split(" ").map(n => n[0]).join("").slice(0, 2)}
+                {blog.author.split(" ").map((n: string) => n[0]).join("").slice(0, 2)}
               </div>
               <div>
                 <p className="font-bold text-slate-900 mb-0.5">{blog.author}</p>
@@ -173,7 +179,13 @@ export default async function ArticlePage({ params }: Props) {
                   {moreArticles.map(a => (
                     <Link key={a.slug} href={`/career-navigator/${a.slug}`} className="group flex gap-4 bg-white rounded-xl p-4 border border-slate-100 hover:shadow-md transition-shadow">
                       <div className="relative w-20 h-20 shrink-0 rounded-xl overflow-hidden">
-                        <Image src={a.coverImage} alt={a.title} fill className="object-cover group-hover:scale-105 transition-transform duration-300" />
+                        <img
+                          src={a.coverImage || fallbackImage}
+                          alt={a.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          loading="lazy"
+                          referrerPolicy="no-referrer"
+                        />
                       </div>
                       <div className="min-w-0">
                         <span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full ${CATEGORY_COLORS[a.category] || "bg-slate-100 text-slate-500"}`}>
@@ -207,7 +219,13 @@ export default async function ArticlePage({ params }: Props) {
                       className="flex gap-3 p-4 hover:bg-slate-50 transition-colors group"
                     >
                       <div className="w-10 h-10 shrink-0 relative rounded-lg overflow-hidden bg-white border border-slate-100">
-                        <Image src={course.imageUrl} alt={course.school} fill className="object-contain p-1" />
+                        <img
+                          src={course.imageUrl || fallbackImage}
+                          alt={course.school}
+                          className="w-full h-full object-contain p-1"
+                          loading="lazy"
+                          referrerPolicy="no-referrer"
+                        />
                       </div>
                       <div className="min-w-0">
                         <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">{course.school}</p>

@@ -148,7 +148,7 @@ export default function CareerNavigatorPage() {
                     </p>
                     <div className="flex items-center gap-3 mt-auto">
                       <div className="w-8 h-8 rounded-full bg-[#ED2B3B] flex items-center justify-center text-white text-xs font-bold shrink-0">
-                        {featured.author.split(" ").map(n => n[0]).join("").slice(0, 2)}
+                        {featured.author.split(" ").map((n: string) => n[0]).join("").slice(0, 2)}
                       </div>
                       <div>
                         <p className="text-xs font-semibold text-slate-900">{featured.author}</p>
@@ -192,7 +192,7 @@ export default function CareerNavigatorPage() {
                       <div className="mt-auto flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <div className="w-7 h-7 rounded-full bg-[#ED2B3B] flex items-center justify-center text-white text-[10px] font-bold shrink-0">
-                            {blog.author.split(" ").map(n => n[0]).join("").slice(0, 2)}
+                            {blog.author.split(" ").map((n: string) => n[0]).join("").slice(0, 2)}
                           </div>
                           <div>
                             <p className="text-[11px] font-semibold text-slate-700">{blog.author}</p>

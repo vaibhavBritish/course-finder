@@ -103,9 +103,31 @@ export default function AdminCoursesPage() {
                 <p className="font-semibold text-slate-900 line-clamp-2">{u.name}</p>
                 <p className="text-sm text-slate-500 mt-1">{u.count} courses • ★ {u.averageRating}</p>
                 <div className="flex gap-2 mt-3">
-                  <button onClick={() => setSelectedSchool(u.slug)} className="text-xs px-3 py-1 rounded-full bg-slate-100 text-slate-700 font-semibold">View</button>
-                  <button onClick={() => renameUniversity(u.slug, u.name)} className="text-xs px-3 py-1 rounded-full bg-blue-50 text-blue-700 font-semibold">Rename</button>
-                  <button onClick={() => deleteUniversity(u.slug, u.name)} className="text-xs px-3 py-1 rounded-full bg-red-50 text-red-700 font-semibold">Delete</button>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedSchool(u.slug)}
+                    className={`text-xs px-3 py-1 rounded-full font-semibold transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-rose-500 ${
+                      selectedSchool === u.slug
+                        ? "bg-rose-600 text-white"
+                        : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                    }`}
+                  >
+                    View
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => renameUniversity(u.slug, u.name)}
+                    className="text-xs px-3 py-1 rounded-full bg-blue-50 text-blue-700 hover:bg-blue-100 font-semibold transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  >
+                    Rename
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => deleteUniversity(u.slug, u.name)}
+                    className="text-xs px-3 py-1 rounded-full bg-red-50 text-red-700 hover:bg-red-100 font-semibold transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-red-400"
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             ))}
