@@ -1,7 +1,5 @@
 "use client";
 
-import Image from "next/image";
-
 export interface Course {
   id: string;
   title: string;
@@ -31,6 +29,28 @@ interface CourseCardProps {
 }
 
 export default function CourseCard({ course, onOpenLeadModal, isGrid = false }: CourseCardProps) {
+  const fallbackLogo = "/favicon.ico";
+  const logoSrc = course.imageUrl?.trim() || fallbackLogo;
+
+  const formatMonthYear = (value: string) => {
+    if (!value) return "";
+
+    // Supports ISO-like values from date inputs (YYYY-MM-DD).
+    const date = new Date(value);
+    if (!Number.isNaN(date.getTime())) {
+      return date.toLocaleDateString("en-CA", {
+        month: "long",
+        year: "numeric",
+      });
+    }
+
+    // If value is already textual (e.g. "September"), keep it unchanged.
+    return value;
+  };
+
+  const formattedStartDate = formatMonthYear(course.startDate);
+  const formattedDeadline = formatMonthYear(course.applicationDeadline);
+
   // Render stars based on rating
   const renderStars = (rating: number) => {
     const stars = [];
@@ -50,7 +70,18 @@ export default function CourseCard({ course, onOpenLeadModal, isGrid = false }: 
       {/* Header: Logo and Title */}
       <div className="flex gap-4 items-start">
         <div className="w-12 h-12 shrink-0 relative rounded-lg overflow-hidden bg-white shadow-sm border border-slate-100 flex items-center justify-center p-1">
-          <Image src={course.imageUrl} alt={course.school} fill className="object-contain" />
+          <img
+            src={logoSrc}
+            alt={course.school}
+            className="w-full h-full object-contain"
+            loading="lazy"
+            referrerPolicy="no-referrer"
+            onError={(e) => {
+              const target = e.currentTarget;
+              if (target.src.endsWith(fallbackLogo)) return;
+              target.src = fallbackLogo;
+            }}
+          />
         </div>
         <div className="min-w-0">
           <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">{course.school}</p>
@@ -67,8 +98,8 @@ export default function CourseCard({ course, onOpenLeadModal, isGrid = false }: 
       <div className="grid grid-cols-2 border border-slate-100 rounded-lg overflow-hidden">
         <div className="p-3 bg-slate-50">
           <p className="text-[10px] text-slate-400 uppercase tracking-wider mb-0.5">Start Date</p>
-          <p className="text-[13px] font-bold text-slate-900 leading-tight">{course.startDate}</p>
-          <p className="text-[10px] text-slate-400 mt-0.5">Deadline: {course.applicationDeadline}</p>
+          <p className="text-[13px] font-bold text-slate-900 leading-tight">{formattedStartDate}</p>
+          <p className="text-[10px] text-slate-400 mt-0.5">Deadline: {formattedDeadline}</p>
         </div>
         <div className="p-3 border-l border-slate-100">
           <p className="text-[10px] text-slate-400 uppercase tracking-wider mb-0.5">Tuition</p>

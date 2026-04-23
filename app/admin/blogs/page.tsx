@@ -65,6 +65,12 @@ export default function AdminBlogsPage() {
             <p className="text-slate-500 mt-1">Add, edit or delete Career Navigator content.</p>
           </div>
           <div className="flex items-center gap-3">
+            <Link
+              href="/admin/courses"
+              className="px-6 py-3 border border-slate-200 text-slate-600 font-bold rounded-full hover:bg-slate-50 transition-all text-sm"
+            >
+              Manage Courses
+            </Link>
             <button
               onClick={logout}
               className="px-6 py-3 border border-slate-200 text-slate-600 font-bold rounded-full hover:bg-slate-50 transition-all text-sm"

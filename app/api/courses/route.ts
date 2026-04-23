@@ -30,6 +30,16 @@ export async function GET(request: Request) {
         .filter((token) => token.length >= 2 && !stopWords.has(token.toLowerCase()))
     : [];
   const normalizedSubject = subjectQuery.toLowerCase();
+  const subjectAliasMap: Record<string, string[]> = {
+    it: ["information technology", "computer science", "software", "cybersecurity"],
+    cs: ["computer science", "software engineering", "development"],
+    mba: ["business administration", "management", "business"],
+    ece: ["early childhood education", "education"],
+  };
+  const aliasKeywords = subjectTokens.flatMap((token) => subjectAliasMap[token.toLowerCase()] || []);
+  const expandedSubjectTerms = Array.from(
+    new Set([subjectQuery, ...subjectTokens, ...aliasKeywords].filter(Boolean))
+  );
   const domainKeywordMap: Record<string, string[]> = {
     business: ['business', 'management', 'commerce', 'entrepreneurship', 'marketing', 'accounting', 'finance'],
     beauty: ['beauty', 'cosmetology', 'aesthetics', 'hairstyling', 'spa', 'wellness'],
@@ -68,9 +78,7 @@ export async function GET(request: Request) {
   // Fuzzy subject matching so submenu values like "Online MBA Programs" still return results.
   if (subjectQuery) {
     const subjectClauses = [
-      { subject: { contains: subjectQuery, mode: 'insensitive' } },
-      { title: { contains: subjectQuery, mode: 'insensitive' } },
-      ...subjectTokens.flatMap((token) => ([
+      ...expandedSubjectTerms.flatMap((token) => ([
         { subject: { contains: token, mode: 'insensitive' } },
         { title: { contains: token, mode: 'insensitive' } },
       ])),
@@ -93,12 +101,12 @@ export async function GET(request: Request) {
     ]);
 
     // Subject-aware fallback: fetch related results based on subject/title tokens.
-    if (totalCount === 0 && subjectQuery) {
+    // IMPORTANT: Do not fallback when user explicitly searched by q.
+    // If q has no matches, return zero results as expected.
+    if (totalCount === 0 && subjectQuery && !q) {
       const relatedWhere = {
         OR: [
-          { subject: { contains: subjectQuery, mode: 'insensitive' as const } },
-          { title: { contains: subjectQuery, mode: 'insensitive' as const } },
-          ...subjectTokens.flatMap((token) => ([
+          ...expandedSubjectTerms.flatMap((token) => ([
             { subject: { contains: token, mode: 'insensitive' as const } },
             { title: { contains: token, mode: 'insensitive' as const } },
           ])),
@@ -119,7 +127,7 @@ export async function GET(request: Request) {
           (acc, [key, values]) => (normalizedSubject.includes(key) ? [...acc, ...values] : acc),
           []
         );
-        const expandedTokens = Array.from(new Set([...subjectTokens, ...domainKeywords]));
+        const expandedTokens = Array.from(new Set([...expandedSubjectTerms, ...domainKeywords]));
 
         if (expandedTokens.length > 0) {
           const broadenedCourses = await prisma.course.findMany({

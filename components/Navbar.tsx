@@ -142,6 +142,43 @@ const categoryMenu: Record<string, string[]> = {
 };
 
 const categories = Object.keys(categoryMenu);
+const rankingsMenu = [
+  "Acting Schools",
+  "BBA and BCom Degrees",
+  "Online BBA and BCom",
+  "Beauty Schools",
+  "Business Schools",
+  "Coding Bootcamps",
+  "Colleges in Ontario",
+  "Online Computer Science Degrees",
+  "Co-op Programs",
+  "Culinary Schools",
+  "Cybersecurity Certifications",
+  "Data Analytics Certifications",
+  "Data Science Bootcamps",
+  "Digital Marketing Certifications",
+  "Early Childhood Education (ECE) Programs",
+  "Engineering Schools",
+  "Executive MBA (EMBA)",
+  "Film Schools",
+  "Flight Schools",
+  "Massage Therapy Schools",
+  "Medical Schools",
+  "Nursing Schools",
+  "OHS Programs",
+  "Online MBA Programs",
+  "Online Universities",
+  "Part-time MBAs",
+  "Trade Schools",
+  "Truck Driving Schools",
+];
+const toSlug = (value: string) =>
+  value
+    .toLowerCase()
+    .trim()
+    .replace(/['’]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 
 type SchoolEntry = {
   name: string;
@@ -155,6 +192,7 @@ type SchoolEntry = {
 const Navbar = () => {
   const [isCoursesOpen, setIsCoursesOpen] = useState(false);
   const [isSchoolsOpen, setIsSchoolsOpen] = useState(false);
+  const [isRankingsOpen, setIsRankingsOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [schools, setSchools] = useState<SchoolEntry[]>([]);
 
@@ -213,6 +251,7 @@ const Navbar = () => {
                 onMouseEnter={() => {
                   if (link === "COURSES") setIsCoursesOpen(true);
                   if (link === "SCHOOLS") setIsSchoolsOpen(true);
+                  if (link === "RANKINGS") setIsRankingsOpen(true);
                 }}
                 onMouseLeave={() => {
                    if (link === "COURSES") {
@@ -222,10 +261,21 @@ const Navbar = () => {
                    if (link === "SCHOOLS") {
                      setIsSchoolsOpen(false);
                    }
+                   if (link === "RANKINGS") {
+                     setIsRankingsOpen(false);
+                   }
                 }}
               >
                 <Link
-                  href={link === "COURSES" ? "#" : link === "SCHOOLS" ? "/schools" : `/${link.toLowerCase().replace(/ /g, "-")}`}
+                  href={
+                    link === "COURSES"
+                      ? "/courses"
+                      : link === "RANKINGS"
+                        ? "#"
+                        : link === "SCHOOLS"
+                        ? "/schools"
+                        : `/${link.toLowerCase().replace(/ /g, "-")}`
+                  }
                   className="text-[11px] font-black text-slate-500 group-hover:text-slate-900 transition-all duration-300 tracking-[0.2em] relative h-full flex items-center px-1"
                 >
                   {link}
@@ -349,6 +399,33 @@ const Navbar = () => {
                         >
                           View all schools
                         </Link>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Rankings Dropdown */}
+                {link === "RANKINGS" && isRankingsOpen && (
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 z-50 w-96 pt-1">
+                    <div className="absolute -top-8 left-0 w-full h-8 bg-transparent pointer-events-auto" />
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2">
+                      <div className="w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-b-8 border-b-rose-600"></div>
+                    </div>
+                    <div className="bg-white rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.18)] border border-slate-200 border-t-4 border-t-rose-600 mt-2 overflow-hidden">
+                      <div className="max-h-[430px] overflow-y-auto py-2">
+                        <div className="px-4 pb-2 text-xs font-bold uppercase tracking-[0.18em] text-slate-400">
+                          Rankings
+                        </div>
+                        {rankingsMenu.map((item) => (
+                          <Link
+                            key={item}
+                            href={`/rankings/${toSlug(item)}`}
+                            onClick={() => setIsRankingsOpen(false)}
+                            className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-rose-700 transition-colors"
+                          >
+                            {item}
+                          </Link>
+                        ))}
                       </div>
                     </div>
                   </div>
